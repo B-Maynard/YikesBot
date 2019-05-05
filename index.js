@@ -1,6 +1,5 @@
 const Commando = require('discord.js-commando');
 const bot = new Commando.Client();
-const TOKEN = 'Mzg5NjI1NDY0MTQ0MDAzMDgz.XM5Vvw.d2qZHzIeMYCBjoFYXbX_OPFLuTs';
 
 //Registers the different groups of commands
 bot.registry.registerGroup('simple', 'Simple');
@@ -24,4 +23,4 @@ bot.on('ready', function() {
   console.log("Ready");
 })
 
-bot.login(TOKEN);
+bot.login(process.env.BOT_TOKEN);
