@@ -1,2 +1,2 @@
 # YikesBot
-Simple discord bot made for personal server
+Simple discord bot made for personal server.
