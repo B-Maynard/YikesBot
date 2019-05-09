@@ -2,7 +2,7 @@ const commando = require('discord.js-commando');
 const YTDL = require('ytdl-core');
 
  function Play(connection, message) {
-   var server = servers[message.guild.id];
+   var server = message.guild.id;
    server.dispatcher = connection.playStream(YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', {filter: "audioonly"}));
    server.dispatcher.on("end", function() {
      connection.disconnect();
@@ -24,7 +24,6 @@ class MesotheliomaCommand extends commando.Command {
       if (!message.guild.voiceConnection) {
         message.member.voiceChannel.join()
         .then(connection => {
-          var server = servers[message.guild.id];
           Play(connection, message);
         });
       }

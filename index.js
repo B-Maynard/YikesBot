@@ -7,7 +7,6 @@ const fs = require('fs');
 //Open userdata file
 const TOKEN = JSON.parse(fs.readFileSync('TOKEN.json', 'utf8'));
 
-
 //Registers the different groups of commands
 bot.registry.registerGroup('simple', 'Simple');
 bot.registry.registerGroup('music', 'Music');
