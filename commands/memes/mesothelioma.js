@@ -5,8 +5,9 @@ const opusscript = require('opusscript');
 
 function Play (connection, message) {
   var server = message.guild.id;
+  conole.log("/" + server);
   server.dispatcher = connection.playStream(YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', {filter: 'audioonly'}));
-  console.log(server.dispatcher);
+  console.log("//" + server.dispatcher);
   server.dispatcher.on('end', function () {
     connection.disconnect();
   });
