@@ -1,13 +1,15 @@
 const commando = require('discord.js-commando');
 const YTDL = require('ytdl-core');
+const ffmpeg = require('ffmpeg');
+const opusscript = require('opusscript');
 
- function Play(connection, message) {
-   var server = message.guild.id;
-   server.dispatcher = connection.playStream(YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', {filter: "audioonly"}));
-   server.dispatcher.on("end", function() {
-     connection.disconnect();
-   });
- }
+function Play (connection, message) {
+  var server = message.guild.id;
+  server.dispatcher = connection.playStream(YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', {filter: 'audioonly'}));
+  server.dispatcher.on('end', function () {
+    connection.disconnect();
+  });
+}
 
 class MesotheliomaCommand extends commando.Command {
   constructor(client) {
