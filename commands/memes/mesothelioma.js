@@ -28,7 +28,7 @@ class MesotheliomaCommand extends commando.Command {
       if (!message.guild.voiceConnection) {
           var voiceChannel = message.member.voiceChannel;
           voiceChannel.join().then (connection => {
-            const stream = ytdl('https://www.youtube.com/watch?v=zIJErVlVOY8', { filter: 'audioonly '});
+            const stream = YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', { filter: 'audioonly '});
             const dispatcher = connection.playStream(stream);
             dispatcher.on("end", end => {
               voiceChannel.leave();
