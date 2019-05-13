@@ -27,7 +27,9 @@ class MesotheliomaCommand extends commando.Command {
     if (message.member.voiceChannel) {
       if (!message.guild.voiceConnection) {
         var connection = await message.member.voiceChannel.join();
-        setTimeout(Play(connection, message), 5000);
+        setTimeout( function() {
+          Play(connection, message);
+        }, 5000);
       }
     }
   }
