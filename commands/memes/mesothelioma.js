@@ -3,15 +3,15 @@ const YTDL = require('ytdl-core');
 const ffmpeg = require('ffmpeg');
 const opusscript = require('opusscript');
 
-function Play (connection, message) {
-  var server = message.guild.id;
-  console.log("/" + server);
-  server.dispatcher = connection.playStream(YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', {filter: 'audioonly'}));
-  console.log("//" + server.dispatcher);
-  server.dispatcher.on('end', function () {
-    connection.disconnect();
-  });
-}
+// function Play (connection, message) {
+//   var server = message.guild.id;
+//   console.log("/" + server);
+//   server.dispatcher = connection.playStream(YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', {filter: 'audioonly'}));
+//   console.log("//" + server.dispatcher);
+//   server.dispatcher.on('end', function () {
+//     connection.disconnect();
+//   });
+// }
 
 class MesotheliomaCommand extends commando.Command {
   constructor(client) {
@@ -26,10 +26,14 @@ class MesotheliomaCommand extends commando.Command {
   async run(message, args) {
     if (message.member.voiceChannel) {
       if (!message.guild.voiceConnection) {
-        var connection = await message.member.voiceChannel.join();
-        setTimeout( function() {
-          Play(connection, message);
-        }, 5000);
+          var voiceChannel = message.member.voiceChannel;
+          voiceChannel.join().then (connection => {
+            const stream = ytdl('https://www.youtube.com/watch?v=zIJErVlVOY8', { filter: 'audioonly '});
+            const dispatcher = connection.playStream(stream);
+            dispatcher.on("end", end => {
+              voiceChannel.leave();
+            });
+          });
       }
     }
   }
