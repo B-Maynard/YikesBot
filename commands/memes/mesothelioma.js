@@ -30,6 +30,7 @@ class MesotheliomaCommand extends commando.Command {
           voiceChannel.join().then (connection => {
             const stream = YTDL('https://www.youtube.com/watch?v=zIJErVlVOY8', { filter: 'audioonly'});
             const dispatcher = connection.playStream(stream);
+            console.log(dispatcher);
             dispatcher.on("end", end => {
               voiceChannel.leave();
             });
