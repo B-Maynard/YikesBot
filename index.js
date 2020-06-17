@@ -1,32 +1,34 @@
-const Commando = require('discord.js-commando');
-const bot = new Commando.Client();
-
-//file reader
 const fs = require('fs');
+const Discord = require('discord.js');
+const config = require('./config.json');
 
-//Open userdata file
-const TOKEN = JSON.parse(fs.readFileSync('TOKEN.json', 'utf8'));
+const client = new Discord.Client();
+client.commands = new Discord.Collection();
+var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-//Registers the different groups of commands
-bot.registry.registerGroup('simple', 'Simple');
-bot.registry.registerGroup('music', 'Music');
-bot.registry.registerGroup('memes', 'Memes');
-bot.registry.registerDefaults();
-bot.registry.registerCommandsIn(__dirname + '/commands');
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
 
+	// set a new item in the Collection
+	// with the key as the command name and the value as the exported module
+	client.commands.set(command.name, command);
+}
 
-//List of servers the bot is currently apart of
-global.servers = {};
+client.on('message', message => {
+    if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
-bot.on('message', function(message) {
-  if (message.content == "Hello") {
-    //How to send a message with a mention to the author of the command
-    message.channel.sendMessage('Hello ' + message.author + ', how are you?');
-  }
+    const args = message.content.slice(config.prefix.length).split(/ +/);
+    const command = args.shift().toLowerCase();
+
+    if (!client.commands.has(command)) return;
+
+    try {
+        client.commands.get(command).execute(message, args);
+    } catch (error) {
+        console.error(error);
+        message.reply('there was an error trying to execute that command!');
+    }
+
 });
 
-bot.on('ready', function() {
-  console.log("Ready");
-})
-
-bot.login(TOKEN["token"]);
+client.login(config.token);
