@@ -1,67 +1,69 @@
-const d3 = require("d3");
-const jsdom = require("jsdom");
-const {JSDOM} = jsdom;
-const sharp = require("sharp");
-const fs = require("fs");
+// const d3 = require("d3");
+// const jsdom = require("jsdom");
+// const {JSDOM} = jsdom;
+// const sharp = require("sharp");
+// const fs = require("fs");
 
 module.exports = {
 	name: 'trackstats',
 	description: 'Tracks win/losses for a game specified and shows the trend on a graph.',
 	execute(message, args) {
 
-		const availableGames = ['Overwatch'];
+		return message.channel.send("This was an interesting idea. I may come back to it at some point.");
 
-		// Args required: game, current sr (0 if not applicable), win/loss, currentSeason
-		var dateNow = Date.now();
-		var svgName = dateNow.toString() + ".svg";
-		var pngName = dateNow.toString() + ".png";
+		// const availableGames = ['Overwatch'];
 
-		if (args[0] != null && args[0].toUpperCase() == 'GAMES') {
-			var stringBuilder = "Games currently available to be tracked:\n";
-			availableGames.forEach(el => {
-				stringBuilder += "- " + el + "\n";
-			});
+		// // Args required: game, current sr (0 if not applicable), win/loss, currentSeason
+		// var dateNow = Date.now();
+		// var svgName = dateNow.toString() + ".svg";
+		// var pngName = dateNow.toString() + ".png";
 
-			return message.channel.send(stringBuilder);
-		}
+		// if (args[0] != null && args[0].toUpperCase() == 'GAMES') {
+		// 	var stringBuilder = "Games currently available to be tracked:\n";
+		// 	availableGames.forEach(el => {
+		// 		stringBuilder += "- " + el + "\n";
+		// 	});
+
+		// 	return message.channel.send(stringBuilder);
+		// }
 		
-		if (args.length < 4) return message.channel.send('Insufficient amount of arguments. Requires [gameName] [sr, 0 if not applicable] [win/loss] [currentSeason]');
+		// if (args.length < 4) return message.channel.send('Insufficient amount of arguments. Requires [gameName] [sr, 0 if not applicable] [win/loss] [currentSeason]');
 
-		var svgSrc;
+		// var svgSrc;
 
-		switch(args[0].toUpperCase()) {
-			case "OVERWATCH":
-				svgSrc = overwatchTracker(args, message, dateNow);
-				break;
-			default:
-				return message.channel.send("This doesn't currently support that game.");
-		}
+		// switch(args[0].toUpperCase()) {
+		// 	case "OVERWATCH":
+		// 		svgSrc = overwatchTracker(args, message, dateNow);
+		// 		break;
+		// 	default:
+		// 		return message.channel.send("This doesn't currently support that game.");
+		// }
 
 
-		fs.writeFileSync("./" + svgName, svgSrc);
+		// fs.writeFileSync("./" + svgName, svgSrc);
 
-		sharp("./" + svgName)
-			.png()
-			.toFile(pngName)
-			.then(function() {
+		// sharp("./" + svgName)
+		// 	.png()
+		// 	.toFile(pngName)
+		// 	.then(function() {
 
-				message.channel.send('Testing', {embed: {
-					title: 'Testing',
-					image: {
-						url: 'attachment://' + pngName
-					},
-					files: [{
-						attachment: './' + pngName,
-						name: pngName
-					}]
-				}}).then(function() {
-					fs.unlinkSync('./' + pngName);
-					fs.unlinkSync('./' + svgName);
-				});
-			})
-			.catch(function(err) {
-				console.log(err);
-			});
+		// 		message.channel.send('Testing', {embed: {
+		// 			title: 'Testing',
+		// 			image: {
+		// 				url: 'attachment://' + pngName
+		// 			},
+		// 			files: [{
+		// 				attachment: './' + pngName,
+		// 				name: pngName
+		// 			}]
+		// 		}}).then(function() {
+		// 			fs.unlinkSync('./' + pngName);
+		// 			fs.unlinkSync('./' + svgName);
+		// 		});
+		// 	})
+		// 	.catch(function(err) {
+		// 		console.log(err);
+		// 	});
 
 
 	},};
