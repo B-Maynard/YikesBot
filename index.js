@@ -7,6 +7,17 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 var commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
+var testMode = false;
+
+// Can enable a test mode so that we don't intentionally break normal yikesbot.
+// Just call the method with "test" as an argument (no hyphens or anything like that)
+if (process.argv.length > 2) {
+    if (process.argv[2] == "test") {
+        testMode = true;
+    }
+}
+
+
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 
@@ -16,9 +27,11 @@ for (const file of commandFiles) {
 }
 
 client.on('message', message => {
-    if (!message.content.startsWith(config.prefix) || message.author.bot) return;
+    var prefix = testMode ? "#" : config.prefix;
 
-    const args = message.content.slice(config.prefix.length).split(/ +/);
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+    const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
     if (!client.commands.has(command)) return;
