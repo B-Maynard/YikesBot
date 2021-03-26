@@ -28,16 +28,19 @@ module.exports = {
             }
 
             //Find if the user has a value in the storage file
-            if (!userData.users[user.id]) userData.users[user.id] = {
-                currentBloonScore: roundCount
+            if (!userData.users[user.id]) {
+                userData.users[user.id] = {
+                    currentBloonScore: roundCount
+                }
             }
-
             // If the user doesn't have a current score at all, just add whatever they give
-            if (!userData.users[user.id].currentBloonScore)
+            else if (!userData.users[user.id].currentBloonScore) {
                 userData.users[user.id].currentBloonScore = roundCount;
+            }
             // Otherwise, check to make sure they're not trying to put in a lower score
-            else if (userData.users[user.id].currentBloonScore < roundCount)
+            else if (userData.users[user.id].currentBloonScore < roundCount) {
                 userData.users[user.id].currentBloonScore = roundCount;
+            }
 
             //Write the bloon score to the file
             fs.writeFile('storage/userData.json', JSON.stringify(userData), (err) => {
