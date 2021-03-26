@@ -17,6 +17,20 @@ var methods = {
         else {
             return "Something happened running the scraper";
         }
+    },
+    convertBloonsImageToRoundCount: function(imgUrl) {
+        var currentDirectory = process.cwd();
+        var pathToPython = path.join(currentDirectory, "utils", "python", "bloonsImageParser.py");
+
+        var result = exec(`python ${pathToPython} ${imgUrl}`);
+
+        if (result) {
+            var convert = result.toString("utf8");
+            return convert;
+        }
+        else {
+            return "Something happened attempting to convert image.";
+        }
     }
 };
 
