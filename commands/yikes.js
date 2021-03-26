@@ -23,18 +23,18 @@ module.exports = {
         }
         
         //Find if the user has a value in the storage file
-        if (!userData[taggedUser.id]) userData[taggedUser.id] = {
+        if (!userData.users[taggedUser.id]) userData.users[taggedUser.id] = {
             yikes: 0
         }
 
         //Increment the users yikes counter
-        userData[taggedUser.id].yikes++;
+        userData.users[taggedUser.id].yikes++;
 
         //Write the yikes counter to the file
         fs.writeFile('storage/userData.json', JSON.stringify(userData), (err) => {
             if (err) console.err(err);
         });
 
-        message.channel.send(`${taggedUser.username} has received 1 yike. They now have ${userData[taggedUser.id].yikes} yike(s).`, {files:['../YikesBot/imgs/yikes.JPG']});
+        message.channel.send(`${taggedUser.username} has received 1 yike. They now have ${userData.users[taggedUser.id].yikes} yike(s).`, {files:['../YikesBot/imgs/yikes.JPG']});
 	},
 };
