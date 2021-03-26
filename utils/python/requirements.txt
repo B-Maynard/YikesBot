@@ -1,4 +1,4 @@
-requests==2.18.4
+requests==2.20.0
 selenium==3.141.0
 webdriver_manager==3.2.2
 pytesseract==0.3.7
