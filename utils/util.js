@@ -8,7 +8,7 @@ var methods = {
         var currentDirectory = process.cwd();
         var pathToPython = path.join(currentDirectory, "utils", "python", "webscraper.py");
 
-        var result = exec(`python ${pathToPython} ${nameOfGame} ${nameOfMap}`);
+        var result = exec(`python3 ${pathToPython} ${nameOfGame} ${nameOfMap}`);
 
         if (result) {
             var convert = result.toString("utf8");
@@ -22,7 +22,7 @@ var methods = {
         var currentDirectory = process.cwd();
         var pathToPython = path.join(currentDirectory, "utils", "python", "bloonsImageParser.py");
 
-        var result = exec(`python ${pathToPython} ${imgUrl}`);
+        var result = exec(`python3 ${pathToPython} ${imgUrl}`);
 
         if (result) {
             var convert = result.toString("utf8");

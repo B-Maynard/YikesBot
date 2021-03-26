@@ -1,4 +1,3 @@
-from cv2 import cv2
 import pytesseract
 import numpy as np
 import requests
@@ -8,7 +7,11 @@ import re
 import os
 
 # Windows
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+if os.name == 'nt':
+    pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+    from cv2 import cv2
+else:
+    import cv2
 
 def main():
     # NOTE: This should always be a valid url from discord. we'll do error checking inside javascript when the message is called.
