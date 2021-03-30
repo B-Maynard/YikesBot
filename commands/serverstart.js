@@ -6,7 +6,7 @@ const { VT, VTexec } = require('open-term');
 
 /*
 *       NEED TO HAVE XTERM INSTALLED FOR THIS TO WORK PROPERLY
-*
+*       PUT THIS LINE IN THE TOP OF THE SCRIPT THAT STARTS THE SERVER: cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd
 */
 
 //Open annoy file
