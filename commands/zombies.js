@@ -7,6 +7,13 @@ module.exports = {
 		
 		if (args.length != 2) return message.channel.send('Incorrect amount of arguments.  Parameters required: zombie-game-appreviation (bocw), name-of-map-with-hyphens (die-maschine)');
 
+		// Do some sanitization before sending this to python, since we're blindly exec'ing anything that comes in
+		args[0] = args[0].replace(/[^A-Za-z0-9]+/i, "");
+		args[1] = args[1].replace(/[^A-Za-z0-9\-]+/i, "");
+
+
+		console.log(args[0] + " " + args[1]);
+
 		var jsonObject = Util.getZombiesWorldRecordsData(args[0], args[1]);
 		try {
 			var result = JSON.parse(jsonObject);
