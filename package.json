@@ -17,7 +17,9 @@
     "jsdom": "^16.2.2",
     "mkdirp": "^1.0.4",
     "node-pre-gyp": "^0.11.0",
+    "open-term": "^2.0.4",
     "opusscript": "0.0.6",
-    "rebuild": "^0.1.2"
+    "rebuild": "^0.1.2",
+    "shelljs": "^0.8.4"
   }
 }

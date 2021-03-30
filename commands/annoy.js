@@ -2,7 +2,7 @@
 const fs = require('fs');
 
 //Open annoy file
-var canAnnoyJson = JSON.parse(fs.readFileSync('storage/annoy.json', 'utf8'));
+var canAnnoyJson = JSON.parse(fs.readFileSync('storage/data.json', 'utf8'));
 
 module.exports = {
 	name: 'annoy',
