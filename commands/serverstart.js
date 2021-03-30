@@ -22,7 +22,7 @@ module.exports = {
 
         if (args.length == 1) {
             // Determine that the server actually exists and a script is attached to it
-            if (dataFile.activeservers[args[0]] && dataFile.activeservers[args[0]].script) {
+            if (dataFile.activeservers[args[0]] && dataFile.activeservers[args[0]].script && dataFile.activeservers[args[0]].active == "1") {
                 var serverScriptFileName = path.basename(dataFile.activeservers[args[0]].script);
 
                 // This script will check to see if the script supplied is already running or not.
