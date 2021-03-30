@@ -1,13 +1,12 @@
 //file reader
 const fs = require('fs');
 
-//Open annoy file
-var dataFile = JSON.parse(fs.readFileSync('storage/data.json', 'utf8'));
-
 module.exports = {
 	name: 'serverstatus',
 	description: 'serverstatus',
 	execute(message, args) {
+        //Open annoy file
+        var dataFile = JSON.parse(fs.readFileSync('storage/data.json', 'utf8'));
 
         // Input validation
 		if (message.author.id != "189200564020707328") return message.channel.send("You cannot use this command.");
@@ -63,7 +62,7 @@ module.exports = {
                 if (err) console.err(err);
             });
 
-            return message.channel.send("Updated list. Use !serverstatus to see current list of servers. Make sure to update the data.json file as well for the command needed to run to get the server up.");
+            return message.channel.send("Updated list. Use !serverstatus to see current list of servers. Make sure to update the data.json file for the script needed to run the server, and add in the CD line from the notes into the script file.");
         }
         else {
             var stringBuilder = "";

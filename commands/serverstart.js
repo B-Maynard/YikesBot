@@ -9,13 +9,12 @@ const { VT, VTexec } = require('open-term');
 *       PUT THIS LINE IN THE TOP OF THE SCRIPT THAT STARTS THE SERVER: cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd
 */
 
-//Open annoy file
-var dataFile = JSON.parse(fs.readFileSync('storage/data.json', 'utf8'));
-
 module.exports = {
 	name: 'serverstart',
 	description: 'Starts up a specific server thats currently active.',
 	execute(message, args) {
+        //Open annoy file
+        var dataFile = JSON.parse(fs.readFileSync('storage/data.json', 'utf8'));
 		
         // Make sure that we're only using valid arguments
         if (args.length != 0 && args.length != 1) return message.channel.send("Invalid arguments. !serverstart [serverName] to start a server. Run !serverstart to see what servers are available.");
@@ -43,7 +42,7 @@ module.exports = {
             var stringBuilder = "";
     
             Object.keys(dataFile.activeservers).forEach(function(server) {
-                if (dataFile.activeservers[server].active == 1) {
+                if (dataFile.activeservers[server].active == "1") {
                     stringBuilder += server + "\n";
                 }
             });
