@@ -21,16 +21,22 @@ module.exports = {
 
         if (args.length == 1) {
             // Determine that the server actually exists and a script is attached to it
-            if (dataFile.activeservers[args[0]] && dataFile.activeservers[args[0]].script && dataFile.activeservers[args[0]].active == "1") {
-                var serverScriptFileName = path.basename(dataFile.activeservers[args[0]].script);
+            console.log(args[0]);
+            if (dataFile.activeservers[args[0]] && (dataFile.activeservers[args[0]].active == "1" || dataFile.activeservers[args[0]].active == 1)) {
+                if (dataFile.activeservers[args[0]].script) {
+                    var serverScriptFileName = path.basename(dataFile.activeservers[args[0]].script);
 
-                // This script will check to see if the script supplied is already running or not.
-                var scriptFilesRunning = shell.exec('utils/checkRunningScripts.sh ' + serverScriptFileName);
-
-                if (scriptFilesRunning.includes(serverScriptFileName))
-                    return message.channel.send("Server already running/starting up.");
+                    // This script will check to see if the script supplied is already running or not.
+                    var scriptFilesRunning = shell.exec('utils/checkRunningScripts.sh ' + serverScriptFileName);
+    
+                    if (scriptFilesRunning.includes(serverScriptFileName))
+                        return message.channel.send("Server already running/starting up.");
+                    else {
+                        VT.linux.xterm(dataFile.activeservers[args[0]].script);
+                    }
+                }
                 else {
-                    VT.linux.xterm(dataFile.activeservers[args[0]].script);
+                    return message.channel.send("There is no script attached to the server.");
                 }
             }
             // If the server isn't a thing, return

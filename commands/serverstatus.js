@@ -15,20 +15,6 @@ module.exports = {
         if (args.length != 0 && args.length != 2) return message.channel.send("Invalid arguments. !serverstatus [nameOfServer] [true/false], or !serverstatus to see status of current servers.");
 
         if (args.length == 2) {
-
-            // Do some input validation
-            if (args[1] != 1 && args[1] != 0 && args[1].toUpperCase() != "TRUE" && args[1].toUpperCase() != "FALSE") return message.channel.send("Invalid arguments. Can only set server active to true/false.");
-
-            // Change true/false to 1/0
-            switch(args[1].toUpperCase()) {
-                case "TRUE":
-                    args[1] = 1;
-                    break;
-                case "FALSE":
-                    args[1] = 0;
-                    break;
-            }
-
             // Remove the item if that's what we're trying to do
             if (args[0].toUpperCase() == "RM") {
                 try {
@@ -45,16 +31,36 @@ module.exports = {
                 }
             }
 
+            // Do some input validation
+            if (args[1] != 1 && args[1] != 0 && args[1].toUpperCase() != "TRUE" && args[1].toUpperCase() != "FALSE") return message.channel.send("Invalid arguments. Can only set server active to true/false.");
+
+            // Change true/false to 1/0
+            switch(args[1].toUpperCase()) {
+                case "TRUE":
+                    args[1] = 1;
+                    break;
+                case "FALSE":
+                    args[1] = 0;
+                    break;
+            }
+
             //Find if the user has a value in the storage file
             if (!dataFile.activeservers[args[0]]) {
                 dataFile.activeservers[args[0]] = {
-                    active: args[1]
+                    active: args[1],
+                    script: ""
                 }
             }
             // If the user doesn't have a current score at all, just add whatever they give
             else {
+                // Make sure to not overwrite the script if it exists
+                var scriptString = "";
+                if (dataFile.activeservers[args[0]].script) {
+                    scriptString = dataFile.activeservers[args[0]].script
+                }
                 dataFile.activeservers[args[0]] = {
-                    active: args[1]
+                    active: args[1],
+                    script: scriptString
                 }
             }
 
