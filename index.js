@@ -2,6 +2,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const config = require('./config.json');
 const token = require('./token.json')
+const data = require('./storage/data.json')
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -29,7 +30,14 @@ for (const file of commandFiles) {
 client.on('message', message => {
     var prefix = testMode ? "#" : config.prefix;
 
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (message.author.bot) return;
+    // Set up the bot to automatically add spoiler tags for things inside certain spoiler channels
+    else if (!message.content.startsWith(prefix) && data.spoilerChannels[message.channel.id]) {
+        message.delete()
+        .then(msg => { return msg.channel.send(`${msg.author} says: \|\| ${msg.content} \|\|`) })
+        .catch(console.error);
+    } 
+    else if (!message.content.startsWith(prefix)) return;
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
