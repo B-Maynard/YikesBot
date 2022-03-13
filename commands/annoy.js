@@ -65,7 +65,7 @@ module.exports = {
                                 && message.guild.members.find(u => u.id == '189200564020707328').lastMessage.createdTimestamp > messageTimestamp 
                                 ? message.guild.members.find(u => u.id == '189200564020707328').lastMessage.content 
                                 : "";
-            var calvinMessage = message.guild.members.find(u => u.id == '150043535884681216').lastMessage != null
+            var calvinMessage = message.guild.members.find(u => u.id == '150043535884681216') && message.guild.members.find(u => u.id == '150043535884681216').lastMessage != null
                                 && message.guild.members.find(u => u.id == '150043535884681216').lastMessage.createdTimestamp > messageTimestamp 
                                 ? message.guild.members.find(u => u.id == '150043535884681216').lastMessage.content 
                                 : "";
