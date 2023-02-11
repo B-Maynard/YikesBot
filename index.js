@@ -31,13 +31,25 @@ client.on('message', message => {
     var prefix = testMode ? "#" : config.prefix;
 
     if (message.author.bot) return;
-    // Set up the bot to automatically add spoiler tags for things inside certain spoiler channels
-    else if (!message.content.startsWith(prefix) && data.spoilerChannels[message.channel.id]) {
-        message.delete()
-        .then(msg => { return msg.channel.send(`${msg.author} says: \|\| ${msg.content} \|\|`) })
-        .catch(console.error);
-    } 
     else if (!message.content.startsWith(prefix)) return;
+
+
+    // May come back to this someday
+    // this is for the spoiler channel stuff
+
+    //-------------------------------------------------
+
+    // else if (!message.content.startsWith(prefix) && data.spoilerChannels.includes(message.channel.id)) {
+    //     let spoilerMessageAuthor = message.author;
+    //     let spoilerMessageContent = message.content;
+
+    //     message.delete()
+    //     .then(msg => { return msg.channel.send(`${spoilerMessageAuthor} says: \|\| ${spoilerMessageContent} \|\|`) })
+    //     .catch(console.error);
+    // } 
+
+    //-------------------------------------------------
+
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
