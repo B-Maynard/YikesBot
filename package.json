@@ -22,6 +22,6 @@
     "open-term": "^2.0.4",
     "opusscript": "0.0.6",
     "rebuild": "^0.1.2",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.5"
   }
 }
