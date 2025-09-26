@@ -1,4 +1,4 @@
 node_modules
-token.json
+src/config.json
 debug.log
-storage
+dist
