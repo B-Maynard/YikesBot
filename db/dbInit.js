@@ -15,15 +15,30 @@ const dbFolders = fs.readdirSync(__dirname).filter(function(file) {
 	return fs.statSync(path.join(__dirname, file)).isDirectory();
 });
 
+let initFiles = [];
 for (const folder of dbFolders) {
 	const dbPath = path.join(__dirname, folder);
 	const dbInitFiles = fs.readdirSync(dbPath).filter(file => file === 'dbInit.js');
 	for (const file of dbInitFiles) {
 		const filePath = path.join(dbPath, file);
 		const initFile = require(filePath);
+		initFiles.push(initFile);
 
 		if ('runInit' in initFile) {
 			initFile.runInit(sequelize, force);
 		}
 	}
 }
+
+
+sequelize.sync({ force }).then(async () => {
+	await Promise.all(
+		initFiles
+			.filter(f => typeof f.resolveFunc === 'function')
+			.map(f => f.resolveFunc())
+	);
+
+	
+}).then(() => {
+	sequelize.close();
+}).catch(console.error);

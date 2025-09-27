@@ -14,14 +14,12 @@ async function addBalance(id, amount) {
 	return newUser;
 }
 
-function getBalance(id) {
-	const user = currency.get(id);
+async function getBalance(id) {
+	const user = await Users.findOne({where: {user_id: id}});
 	return user ? user.balance : 0;
 }
 
 async function initBalances(guildMembers) {
-
-	const members = guildMembers;
 
 	guildMembers.forEach(async user => {
 		let currentUserValue = await Users.findOne({
