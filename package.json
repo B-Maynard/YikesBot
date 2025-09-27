@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node ./src/deploy-commands.js test && node index.js test",
     "start": "node ./src/deploy-commands.js && node index.js",
     "sync-db": "node ./db/dbInit.js",
     "deploy-commands": "node ./src/deploy-commands.js"

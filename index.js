@@ -2,10 +2,11 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require('discord.js');
+
+const args = process.argv.slice(2);
+
 const config = require('./src/config.json');
-
 const shopUtil = require('./src/helpers/shopHelpers');
-
 const rootDir = `${__dirname}/src`;
 
 // Create a new client instance
@@ -49,7 +50,13 @@ client.once(Events.ClientReady, async readyClient => {
 });
 
 // Log in to Discord with your client's token
-client.login(config.token);
+if (args[0] === "test") {
+	client.login(config.test.token);
+}
+else {
+	client.login(config.prod.token);
+}
+
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
