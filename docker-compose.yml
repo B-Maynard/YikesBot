@@ -5,7 +5,7 @@ services:
     image: bkmaynard/yikesbot:latest
     restart: unless-stopped
     volumes:
-      - /home/bailey/Docker/YikesBot/yikesbot-db:/app/database.sqlite
+      - /home/bailey/Docker/YikesBot/database.sqlite:/app/database.sqlite
       # Point this to a config.json on the host (edit the left-hand path):
       - /home/bailey/Docker/YikesBot/config.json:/app/src/config.json:ro
     # No ports needed; the bot connects outbound to Discord

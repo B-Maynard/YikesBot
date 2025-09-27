@@ -9,6 +9,8 @@ RUN npm ci --omit=dev
 # Copy source
 COPY . .
 
+RUN mkdir -p /app/src && touch /app/src/config.json /app/database.sqlite
+
 ENV NODE_ENV=production
 
 # Default command: sync DB then start (deploy commands + run bot)
