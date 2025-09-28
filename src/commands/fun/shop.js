@@ -1,4 +1,4 @@
-const { StringSelectMenuOptionBuilder, MessageFlags, StringSelectMenuBuilder, ContainerBuilder, ActionRowBuilder, ButtonStyle, ButtonBuilder, SlashCommandBuilder } = require('discord.js');
+const { StringSelectMenuOptionBuilder, MessageFlags, StringSelectMenuBuilder, ContainerBuilder, ActionRowBuilder, ButtonStyle, ButtonBuilder, SlashCommandBuilder, TextDisplayBuilder } = require('discord.js');
 const shopUtil = require('../../helpers/shopHelpers');
 const { CurrencyShop, Users } = require('../../../db/currencyshop/dbObjects');
 const { codeBlock } = require('discord.js');
@@ -52,12 +52,15 @@ module.exports = {
 				items.forEach(item => {
 					options.push(new StringSelectMenuOptionBuilder()
 						.setLabel(item.dataValues.name)
-						.setDescription(`Cost: ${item.dataValues.cost}`)
+						.setDescription(`Cost: ${item.dataValues.cost}💰`)
 						.setValue(item.dataValues.id.toString()));
 				});
 
 				const exampleContainer = new ContainerBuilder()
 					.setAccentColor(0x0099FF)
+					.addTextDisplayComponents(
+						textDisplay => textDisplay.setContent('💰          SHOP          💰')
+					)
 					.addActionRowComponents(
 						actionRow => actionRow
 							.setComponents(
@@ -72,6 +75,7 @@ module.exports = {
 					)
 					.addSectionComponents(
 						section => section
+							.addTextDisplayComponents(text => text.setContent('Ready to purchase?'))
 							.setButtonAccessory(
 								button => button
 									.setCustomId('buyButton')
@@ -86,18 +90,41 @@ module.exports = {
 					withResponse: true
 				});
 
-				const collectorFilter = i => i.user.id === interaction.user.id;
-				try {
-					const confirmation = await response.resource.message.awaitMessageComponent({ filter: collectorFilter, time: 60_000 });
+				// Track the user's current selection without sending a response
+				let selectedItemId = null;
+				const collectorFilter = i => i.user.id === interaction.user.id && (i.customId === 'shop' || i.customId === 'buyButton');
 
-					if (confirmation.customId === 'confirm') {
-						await confirmation.update({ content: `test`, components: [] });
-					} else if (confirmation.customId === 'cancel') {
-						await confirmation.update({ content: 'test2', components: [] });
+				const collector = response.resource.message.createMessageComponentCollector({ filter: collectorFilter, time: 60_000 });
+
+				collector.on('collect', async i => {
+					if (i.customId === 'shop') {
+						// Store latest selection; no visible response
+						selectedItemId = i.values?.[0] ?? null;
+						await i.deferUpdate();
+						return;
 					}
-				} catch {
+
+					if (i.customId === 'buyButton') {
+						// Only act once the buy button is pressed
+						if (!selectedItemId) {
+							await i.reply({ content: 'Please select an item first.', ephemeral: true });
+							return;
+						}
+
+						const itemObj = items.find(item => item.dataValues.id.toString() === selectedItemId);
+						await i.reply(`You purchased ${itemObj?.dataValues?.name ?? 'Unknown item'}`);
+						collector.stop('purchased');
+					}
+				});
+
+				collector.on('end', async (_collected, reason) => {
+					if (reason === 'purchased') {
+						// Clean up components after purchase
+						await response.resource.message.edit({ components: [] });
+						return;
+					}
 					await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
-				}
+				});
 				break;
 			// return interaction.reply(codeBlock(items.map(i => `${i.name}: ${i.cost}💰`).join('\n')));
 			case "leaderboard":
