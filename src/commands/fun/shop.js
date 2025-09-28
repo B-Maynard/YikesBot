@@ -27,15 +27,6 @@ module.exports = {
 		.addSubcommand(sub =>
 			sub.setName('leaderboard')
 				.setDescription('Opens the leaderboard')
-		)
-		.addSubcommand(sub =>
-			sub.setName('buy')
-				.setDescription('Buy items from the shop')
-				.addStringOption(option =>
-					option.setName('item')
-						.setDescription('The item to buy')
-						.setRequired(true)
-				)
 		),
 	async execute(interaction) {
 
@@ -110,9 +101,14 @@ module.exports = {
 							await i.reply({ content: 'Please select an item first.', ephemeral: true });
 							return;
 						}
+						else {
+							let itemData = items.find(item => item.dataValues.id.toString() === selectedItemId);
+							if (itemData && itemData?.dataValues?.cost > await shopUtil.getBalance(interaction.user.id)) {
+								await i.reply({ content: `You do not have enough to afford ${itemData?.dataValues?.name}`, ephemeral: true });
+								return;
+							}
+						}
 
-						const itemObj = items.find(item => item.dataValues.id.toString() === selectedItemId);
-						await i.reply(`You purchased ${itemObj?.dataValues?.name ?? 'Unknown item'}`);
 						collector.stop('purchased');
 					}
 				});
@@ -120,13 +116,13 @@ module.exports = {
 				collector.on('end', async (_collected, reason) => {
 					if (reason === 'purchased') {
 						// Clean up components after purchase
-						await response.resource.message.edit({ components: [] });
+						const itemObj = items.find(item => item.dataValues.id.toString() === selectedItemId);
+						await response.resource.message.edit({ components: [new TextDisplayBuilder({content: `You purchased ${itemObj?.dataValues?.name ?? 'Unknown item'}`})] });
 						return;
 					}
-					await interaction.editReply({ content: 'Confirmation not received within 1 minute, cancelling', components: [] });
+					await interaction.editReply({components: [new TextDisplayBuilder({content: 'Confirmation not received within 1 minute, cancelling'})]});
 				});
 				break;
-			// return interaction.reply(codeBlock(items.map(i => `${i.name}: ${i.cost}💰`).join('\n')));
 			case "leaderboard":
 				const users = await Users.findAll();
 				return interaction.reply(
@@ -138,27 +134,6 @@ module.exports = {
 							.join('\n')
 					)
 				);
-			case "buy":
-				let itemString = interaction.options.getString('item');
-
-				if (!itemString) {
-					return interaction.reply("An item is required for this command.");
-				}
-
-				const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: itemString } } })
-
-				if (!item) return interaction.reply("Item does not exist in the shop.");
-
-				if (item.cost > await shopUtil.getBalance(interaction.user.id)) {
-					return interaction.reply(`You currently have ${await shopUtil.getBalance(interaction.user.id)}💰, but ${item.name} costs ${item.cost}💰`);
-				}
-
-				const dbUser = await Users.findOne({ where: { user_id: interaction.user.id } });
-				shopUtil.addBalance(interaction.user.id, -item.cost);
-				await dbUser.addItem(item);
-
-				return interaction.reply(`You've bought: ${item.name}`);
-
 			default:
 				break;
 		}
