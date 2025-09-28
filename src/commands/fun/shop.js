@@ -3,10 +3,6 @@ const shopUtil = require('../../helpers/shopHelpers');
 const { CurrencyShop, Users } = require('../../../db/currencyshop/dbObjects');
 const { codeBlock } = require('discord.js');
 
-const { Op } = require('sequelize');
-
-
-
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('shop')
