@@ -1,12 +1,12 @@
 const { StringSelectMenuOptionBuilder, MessageFlags, StringSelectMenuBuilder, ContainerBuilder, ActionRowBuilder, ButtonStyle, ButtonBuilder, SlashCommandBuilder, TextDisplayBuilder } = require('discord.js');
 const shopUtil = require('../../helpers/shopHelpers');
-const { CurrencyShop, Users } = require('../../../db/currencyshop/dbObjects');
+const { CreatureItems, Users } = require('../../../db/creatureshop/dbObjects');
 const { codeBlock } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('shop')
-		.setDescription('General shop commands')
+		.setName('creatureshop')
+		.setDescription('General creature shop commands')
 		.addSubcommand(sub =>
 			sub.setName('balance')
 				.setDescription('Show a users balance')

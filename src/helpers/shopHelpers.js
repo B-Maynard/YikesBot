@@ -1,4 +1,4 @@
-const {Users, CurrencyShop} = require('../../db/currencyshop/dbObjects.js');
+const {Users, CurrencyShop} = require('../../db/creatureshop/dbObjects.js');
 
 async function addBalance(id, amount) {
 	const user = currency.get(id);
@@ -33,6 +33,10 @@ async function initBalances(guildMembers) {
 		}
 	});
 
+}
+
+function applyEffect(itemEffId, value) {
+	
 }
 
 module.exports = {addBalance, getBalance, initBalances}
