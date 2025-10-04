@@ -9,7 +9,7 @@ let Creatures = null;
 
 function runInit(db, force) {
 
-    CreatureItems = require('./models/CreatureItems.js')(db, Sequelize.DataTypes);
+    CreatureItems = require('./models/Items.js')(db, Sequelize.DataTypes);
     Users = require('./models/Users.js')(db, Sequelize.DataTypes);
     UserCreatures = require('./models/UserCreatures.js')(db, Sequelize.DataTypes);
     Creatures = require('./models/Creatures.js')(db, Sequelize.DataTypes);
@@ -17,6 +17,8 @@ function runInit(db, force) {
 
 async function resolveFunc() {
     let shop = [];
+    let creatures = [];
+
     data.itemShop.forEach(item => {
         shop.push(CreatureItems.upsert(item));
     });
@@ -25,17 +27,20 @@ async function resolveFunc() {
     let currentUsers = await Users.findAll();
     let currentCreatures = await Creatures.findAll();
 
-    //TODO: need to init all creatures from creature config into the creatures database
+    data.CREATURES.forEach(creature => {
+        creatures.push(Creatures.upsert(creature));
+    });
 
-    currentUsers.foreach(async user => {
+    currentUsers.forEach(async user => {
         let currentUsersCreatures = currentUserCreatures.find(entry => entry.user_id === user.user_id);
-        if (currentUsersCreatures.length === 0) {
+        if (currentUsersCreatures?.length === 0) {
             let defaultCreature = currentCreatures.find(creature => creature.name === CREATURES.FLUFFLET);
             await UserCreatures.addCreature(defaultCreature);
         }
     });
 
     await Promise.all(shop);
+    await Promise.all(creatures);
     console.log('CreatureItems synced');
     console.log('Creatures synced');
     console.log('Users synced');

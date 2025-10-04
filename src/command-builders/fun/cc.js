@@ -1,12 +1,13 @@
 const { StringSelectMenuOptionBuilder, MessageFlags, StringSelectMenuBuilder, ContainerBuilder, ActionRowBuilder, ButtonStyle, ButtonBuilder, SlashCommandBuilder, TextDisplayBuilder } = require('discord.js');
-const shopUtil = require('../../helpers/shopHelpers');
 const { CreatureItems, Users } = require('../../../db/creatureshop/dbObjects');
 const { codeBlock } = require('discord.js');
 
+const shopHelpers = require('../../helpers/shopHelpers');
+
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('creatureshop')
-		.setDescription('General creature shop commands')
+		.setName('cc')
+		.setDescription('General Creature Collector commands')
 		.addSubcommand(sub =>
 			sub.setName('balance')
 				.setDescription('Show a users balance')
@@ -17,12 +18,16 @@ module.exports = {
 				)
 		)
 		.addSubcommand(sub =>
-			sub.setName('open')
+			sub.setName('shop')
 				.setDescription('Opens the shop')
 		)
 		.addSubcommand(sub =>
 			sub.setName('leaderboard')
 				.setDescription('Opens the leaderboard')
+		)
+		.addSubcommand(sub => 
+			sub.setName('collection')
+				.setDescription('Opens your current Creature Collection')
 		),
 	async execute(interaction) {
 
@@ -31,15 +36,15 @@ module.exports = {
 
 		switch (subCommand) {
 			case "balance":
-				return interaction.reply(`${user.tag} has ${await shopUtil.getBalance(user.id)}💰`);
-			case "open":
-				const items = await CurrencyShop.findAll();
+				return interaction.reply(await shopHelpers.getBalanceString(user));
+			case "shop":
+				const items = await CreatureItems.findAll();
 				let options = [];
 
 				items.forEach(item => {
 					options.push(new StringSelectMenuOptionBuilder()
 						.setLabel(item.dataValues.name)
-						.setDescription(`Cost: ${item.dataValues.cost}💰`)
+						.setDescription(shopHelpers.getCurrentShopItemCost(item))
 						.setValue(item.dataValues.id.toString()));
 				});
 
@@ -99,7 +104,7 @@ module.exports = {
 						}
 						else {
 							let itemData = items.find(item => item.dataValues.id.toString() === selectedItemId);
-							if (itemData && itemData?.dataValues?.cost > await shopUtil.getBalance(interaction.user.id)) {
+							if (itemData && itemData?.dataValues?.shop_cost > await shopUtil.getBalance(interaction.user.id)) {
 								await i.reply({ content: `You do not have enough to afford ${itemData?.dataValues?.name}`, ephemeral: true });
 								return;
 							}
@@ -130,6 +135,8 @@ module.exports = {
 							.join('\n')
 					)
 				);
+			case "collection":
+				break;
 			default:
 				break;
 		}

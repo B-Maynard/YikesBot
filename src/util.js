@@ -5,7 +5,7 @@ const rootDir = `${__dirname}`;
 
 function getAllCommandsAndFilepaths() {
     let commandObjArr = [];
-    const foldersPath = path.join(rootDir, 'commands');
+    const foldersPath = path.join(rootDir, 'command-builders');
     const commandFolders = fs.readdirSync(foldersPath);
 
     for (const folder of commandFolders) {

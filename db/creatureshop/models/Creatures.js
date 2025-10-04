@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false
 		},
 		icon: {
-			path: DataTypes.STRING,
+			type: DataTypes.STRING,
 			allowNull: false
 		}
 	}, {

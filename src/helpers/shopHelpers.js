@@ -39,4 +39,18 @@ function applyEffect(itemEffId, value) {
 	
 }
 
-module.exports = {addBalance, getBalance, initBalances}
+async function getBalanceString(user) {
+    return `${user.tag} has ${await shopUtil.getBalance(user.id)}💰`;
+}
+
+function getCurrentShopItemCost(item) {
+    return `Cost: ${item.dataValues.shop_cost}💰`;
+}
+
+module.exports = {
+	addBalance, 
+	getBalance, 
+	initBalances,
+	getBalanceString,
+	getCurrentShopItemCost
+}

@@ -1,7 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-	return sequelize.define('creature_items', {
+	return sequelize.define('user_items', {
 		user_id: DataTypes.STRING,
-		creature_name: DataTypes.STRING,
         item_name: DataTypes.STRING
 	}, {
 		timestamps: false,

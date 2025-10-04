@@ -14,7 +14,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 
 client.commands = new Collection();
 
-const foldersPath = path.join(rootDir, 'commands');
+const foldersPath = path.join(rootDir, 'command-builders');
 const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {

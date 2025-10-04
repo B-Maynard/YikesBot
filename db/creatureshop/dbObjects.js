@@ -8,7 +8,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 const Users = require('./models/Users.js')(sequelize, Sequelize.DataTypes);
-const CreatureItems = require('./models/CreatureItems.js')(sequelize, Sequelize.DataTypes);
+const CreatureItems = require('./models/Items.js')(sequelize, Sequelize.DataTypes);
 const Creatures = require('./models/Creatures.js')(sequelize, Sequelize.DataTypes);
 const UserCreatures = require('./models/UserCreatures.js')(sequelize, Sequelize.DataTypes);
 
@@ -41,4 +41,4 @@ Reflect.defineProperty(UserCreatures.prototype, 'addItem', {
 	},
 });
 
-module.exports = { Users, CreatureItems, Creatures, UserCreatures, UserItems };
+module.exports = { Users, CreatureItems, Creatures, UserCreatures };
