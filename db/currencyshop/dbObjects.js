@@ -14,7 +14,7 @@ const UserItems = require('./models/UserItems.js')(sequelize, Sequelize.DataType
 UserItems.belongsTo(CurrencyShop, { foreignKey: 'item_id', as: 'item' });
 
 Reflect.defineProperty(Users.prototype, 'addItem', {
-	value: async item => {
+	value: async function(item) {
 		const userItem = await UserItems.findOne({
 			where: { user_id: this.user_id, item_id: item.id },
 		});
@@ -28,8 +28,26 @@ Reflect.defineProperty(Users.prototype, 'addItem', {
 	},
 });
 
+Reflect.defineProperty(Users.prototype, 'removeItem', {
+	value: async function(item) {
+		const userItem = await UserItems.findOne({
+			where: { user_id: this.user_id, item_id: item.id },
+		});
+
+		if (userItem) {
+			userItem.amount -= 1;
+			if (userItem.amount <= 0) {
+				return userItem.destroy();
+			}
+			return userItem.save();
+		}
+		
+		return null;
+	},
+});
+
 Reflect.defineProperty(Users.prototype, 'getItems', {
-	value: () => {
+	value: function() {
 		return UserItems.findAll({
 			where: { user_id: this.user_id },
 			include: ['item'],

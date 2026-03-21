@@ -3,22 +3,21 @@ const path = require('node:path');
 
 const rootDir = `${__dirname}`;
 
-function getAllCommandsAndFilepaths() {
+function getAllCommandsAndFilepaths(dirPath = path.join(rootDir, 'commands')) {
     let commandObjArr = [];
-    const foldersPath = path.join(rootDir, 'commands');
-    const commandFolders = fs.readdirSync(foldersPath);
+    if (!fs.existsSync(dirPath)) return commandObjArr;
 
-    for (const folder of commandFolders) {
-        const commandsPath = path.join(foldersPath, folder);
-        const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-        for (const file of commandFiles) {
-            const filePath = path.join(commandsPath, file);
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
+    for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
+        if (entry.isDirectory()) {
+            commandObjArr = commandObjArr.concat(getAllCommandsAndFilepaths(fullPath));
+        } else if (entry.isFile() && entry.name.endsWith('.js')) {
             let tempObj = {
-                "path": filePath,
-                "command": file.replace(".js", "")
+                "path": fullPath,
+                "command": entry.name.replace(".js", "")
             }
-
             commandObjArr.push(tempObj);
         }
     }
